@@ -1,0 +1,28 @@
+{
+  "name": "analyticsapi",
+  "version": "0.0.0",
+  "description": "An api for various analytics APIs (google, facebook etc.) collectively.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoldAgency/AnalyticsApi.git"
+  },
+  "keywords": [
+    "mold",
+    "node",
+    "nodejs",
+    "mocha",
+    "express",
+    "api",
+    "data"
+  ],
+  "author": "Mold Agency",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MoldAgency/AnalyticsApi/issues"
+  },
+  "homepage": "https://github.com/MoldAgency/AnalyticsApi#readme"
+}
