@@ -1,36 +1,43 @@
 {
-    "name": "analyticsapi",
-    "version": "0.0.0",
-    "description": "An api for various analytics APIs (google, facebook etc.) collectively.",
-    "main": "server.js",
-    "scripts": {
-        "test": "mocha --timeout 10000",
-        "nodemon": "SET NODE_ENV=dev && nodemon server.js",
-        "start": "SET NODE_ENV=dev && node server.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/MoldAgency/AnalyticsApi.git"
-    },
-    "keywords": [
-        "mold",
-        "node",
-        "nodejs",
-        "mocha",
-        "express",
-        "api",
-        "data"
-    ],
-    "author": "Mold Agency",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/MoldAgency/AnalyticsApi/issues"
-    },
-    "homepage": "https://github.com/MoldAgency/AnalyticsApi#readme",
-    "devDependencies": {
-        "chai": "^3.5.0",
-        "chai-http": "^3.0.0",
-        "mocha": "^3.2.0",
-        "nodemon": "^1.11.0"
-    }
+  "name": "analyticsapi",
+  "version": "0.0.0",
+  "description": "An api for various analytics APIs (google, facebook etc.) collectively.",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --timeout 10000",
+    "nodemon": "SET NODE_ENV=dev && nodemon server.js",
+    "start": "SET NODE_ENV=dev && node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoldAgency/AnalyticsApi.git"
+  },
+  "keywords": [
+    "mold",
+    "node",
+    "nodejs",
+    "mocha",
+    "express",
+    "api",
+    "data"
+  ],
+  "author": "Mold Agency",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MoldAgency/AnalyticsApi/issues"
+  },
+  "homepage": "https://github.com/MoldAgency/AnalyticsApi#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.0",
+    "express": "^4.15.1",
+    "morgan": "^1.8.1",
+    "passport": "^0.3.2"
+  }
 }
