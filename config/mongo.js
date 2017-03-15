@@ -1,6 +1,6 @@
 module.exports = {
 
-    'secret': 'p1nkwalls!',
-    'database': 'mongodb://alex:alexmold@192.168.1.91/social' //MongoDB URI. mongodb://username:password:url:port/
+    'secret': 'At street level, Thats it thats it thats it',
+    'database': 'mongodb://mold:p1nkwalls@ds133338.mlab.com:33338/mold' //MongoDB URI. mongodb://username:password:url:port/
 
 };

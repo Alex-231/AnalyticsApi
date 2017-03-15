@@ -14,10 +14,6 @@ var ClientSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
-    users: {
-        type: [ClientUserSchema.schema],
-        required: false,
-    },
     apiTokens: {
         type: ApiTokensSchema.schema,
         required: true
