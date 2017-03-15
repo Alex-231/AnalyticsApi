@@ -29,6 +29,11 @@ mongoose.connect(mongoConfig.database, function(err) {
 });
 
 //Initialize passport.
+app.use(session({
+    secret: 'p1nkwalls',
+    resave: false,
+    saveUninitialized: true,
+}));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
