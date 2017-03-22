@@ -4,8 +4,6 @@ var passport = require('passport');
 
 // app/routes.js
 
-
-
 router.post('/signup',
     passport.authenticate('local-signup'),
     function(req, res) {
@@ -17,10 +15,9 @@ router.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-router.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/profile', // redirect to the secure profile section
-    failureRedirect: '/login', // redirect back to the signup page if there is an error
-}));
+router.post('/login', passport.authenticate('local-login'), function(req, res) {
+    res.send(req.isAuthenticated);
+});
 
 
 module.exports = router;

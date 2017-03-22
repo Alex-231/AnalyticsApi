@@ -1,9 +1,5 @@
 var mongoose = require('mongoose');
 
-//Require embedded document schemas.
-var ClientUserSchema = require('./ClientUser');
-var ApiTokensSchema = require('./ApiTokens');
-
 var ClientSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -14,9 +10,53 @@ var ClientSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
-    apiTokens: {
-        type: ApiTokensSchema.schema,
-        required: true
+    apiData: {
+        facebook: {
+            appId: {
+                type: String,
+                unique: true
+            },
+            appSecret: {
+                type: String
+            },
+            pageToken: {
+                type: String
+            },
+            pageId: {
+                type: String
+            }
+        },
+        twitter: {
+
+        },
+        instagram: {
+
+        }
+    },
+    cachedAnalytics: [{
+        provider: {
+            type: String,
+            required: true
+        },
+        likes: [{
+            count: {
+                type: Number
+            },
+            data: {
+                type: Date
+            }
+        }],
+        followers: [{
+            count: {
+                type: Number
+            },
+            date: {
+                type: Date
+            }
+        }],
+    }],
+    errorsLastCache: {
+        type: [String]
     }
 });
 

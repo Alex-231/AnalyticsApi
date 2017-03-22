@@ -9,6 +9,8 @@ var mongoose = require('mongoose');
 
 var mongoConfig = require('./config/mongo');
 
+
+
 require('./config/passport')(passport); // Require Passport Config
 //Get POSTS with body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,6 +38,11 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
+
+
+//Require stric mode on routes which need strict for classes.
+//I don't imagine this is the best way of using strict mode,
+//But it's certainly not the worst.
 
 //Require routes.
 require('./app/routes/main')(app);

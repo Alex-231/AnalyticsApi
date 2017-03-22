@@ -16,7 +16,7 @@ var UserSchema = new mongoose.Schema({
     role: {
         type: String,
         require: true,
-        enum: ['Admin', 'ClientUser', 'None'],
+        enum: ['Admin', 'Client', 'None'],
         default: 'None'
     },
     clients: {
