@@ -35,6 +35,8 @@ router.get('/:id', routerUtils.isLoggedIn, function(req, res) {
 
 router.post('/:id/setup/facebook', routerUtils.isLoggedIn, function(req, res) {
 
+    var responseObject = {};
+
     //Does the user have permission to do this?
     if (req.user.role == 'Client') {
         var clientFound = false;
@@ -43,26 +45,31 @@ router.post('/:id/setup/facebook', routerUtils.isLoggedIn, function(req, res) {
             clientFound = true;
         }
 
-        if (!clientFound)
-            res.send("You don't have permission to do this.");
-    } else if (req.user.role = 'Admin') {
-        res.send("You don't have permission to do this.");
-    }
-
-    Client.findById(req.params.id, function(err, client) {
-        if (err)
-            res.send(err);
-        else if (!client)
-            res.send("Client not found");
-        else {
-            client.apiTokens.facebook.appID = req.body.appID;
-            client.apiTokens.facebook.appSecret = req.body.appSecret;
-            client.save();
-
-            res.send("Updated client.");
+        if (!clientFound) {
+            responseObject.message = "You don't have permission to do this";
+            responseObject.success = false;
         }
+    } else {
 
-    })
+        Client.findById(req.params.id, function(err, client) {
+            if (err) {
+                responseObject.message = err;
+                responseObject.success = false;
+            } else if (!client) {
+                responseObject.message = "Client not found.";
+                responseObject.success = false;
+            } else {
+                client.apiTokens.facebook.appID = req.body.appID;
+                client.apiTokens.facebook.appSecret = req.body.appSecret;
+                client.save();
+
+                responseObject.message = "Updated Client";
+                responseObject.success = true;
+            }
+
+        })
+    }
+    res.send(responseObject);
 
     //Go to oauth.
 

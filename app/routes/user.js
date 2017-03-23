@@ -12,6 +12,7 @@ router.post('/clients',
     routerUtils.isLoggedIn,
     function(req, res) {
 
+        var responseObject = {};
         var clients = Array();
 
         for (var i = 0, len = req.user.clients.len; i < len; i++) {
@@ -20,7 +21,10 @@ router.post('/clients',
                 clients.push(client);
         }
 
-        res.send(req.user.clients);
+
+        responseObject.message = req.user.clients;
+        responseObject.success = true;
+        res.send(responseObject);
 
     });
 

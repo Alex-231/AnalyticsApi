@@ -42,7 +42,7 @@ var ClientSchema = new mongoose.Schema({
             count: {
                 type: Number
             },
-            data: {
+            date: {
                 type: Date
             }
         }],

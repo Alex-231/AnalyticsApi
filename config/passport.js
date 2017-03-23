@@ -1,26 +1,21 @@
-// config/passport.js
-
-// load all the things we need
 var LocalStrategy = require('passport-local').Strategy;
-
-// load up the user model
 var User = require('../app/models/user');
 
-// expose this function to our app using module.exports
 module.exports = function(passport) {
 
-    // used to serialize the user for the session
+    //Serialize user for session token.
     passport.serializeUser(function(user, done) {
         done(null, user._id);
     });
 
-    // used to deserialize the user
+    //Deserialize user for session token.
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
             done(err, user);
         });
     });
 
+    //Local signup stratergy.
     passport.use('local-signup', new LocalStrategy({
             //Override default local strat
             usernameField: 'email',
@@ -29,17 +24,8 @@ module.exports = function(passport) {
         },
         function(req, email, password, done) {
 
-            console.log("email " + email);
-
-            console.log("About to look for an existing user...");
-
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exist.
-
+            //Look for an existing user.
             User.findOne({ email: email.toLowerCase() }, function(err, user) {
-                // if there are any errors, return the error
-                console.log("findOne returned " + err + " " + user);
-
                 if (err)
                     return done(err);
 
@@ -67,44 +53,36 @@ module.exports = function(passport) {
             });
         }));
 
+    //Local login strat.
     passport.use('local-login', new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
             usernameField: 'email',
             passwordField: 'password',
             passReqToCallback: true,
         },
         function(req, email, password, done) { // callback with email and password from our form
 
-            console.log("email " + email);
-
-            console.log("About to look for an existing user...");
-
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exists
+            //Look for an existing user.
             User.findOne({ email: email.toLowerCase() }, function(err, user) {
-                // if there are any errors, return the error before anything else
+
                 if (err) {
-                    console.log(err);
-                    return done(err);
+                    return done(err, false);
                 }
 
                 // if no user is found, return the message
                 if (!user) {
-                    console.log("no user found.")
                     return done("No user found", false);
                 }
 
+                //Use the schema password compare function.
                 user.comparePassword(password, function(err, isMatch) {
                     if (isMatch && !err) {
-                        console.log("found user " + user);
                         return done(null, user);
                     } else {
-                        console.log("user " + user + " has a different password");
-                        return done("Authentication Error", null);
+                        return done("Authentication Error", false);
                     }
                 })
 
-                // all is well, return successful user
+                // got eem.
                 return done(null, user);
             });
         }));

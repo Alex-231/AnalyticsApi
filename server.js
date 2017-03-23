@@ -1,5 +1,5 @@
 var express = require('express');
-var app = express(); //Instance express (?)
+var app = express();
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -38,11 +38,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-
-
-//Require stric mode on routes which need strict for classes.
-//I don't imagine this is the best way of using strict mode,
-//But it's certainly not the worst.
 
 //Require routes.
 require('./app/routes/main')(app);

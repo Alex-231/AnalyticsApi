@@ -7,16 +7,35 @@ var passport = require('passport');
 router.post('/signup',
     passport.authenticate('local-signup'),
     function(req, res) {
-        res.send(req.user);
+        var responseObject = {};
+        if (req.isAuthenticated) {
+            responseObject.success = true;
+            responseObject.message = "Signup Successful! Authenticated!";
+        } else {
+            responseObject.success = false;
+            responseObject.message = "Failed to signup.";
+        }
+        res.send(responseObject);
     });
 
 router.get('/logout', function(req, res) {
+    var responseObject = {};
     req.logout();
-    res.redirect('/');
+    responseObject.success = true;
+    responseObject.message = "Sucessfully logged out.";
+    res.send(responseObject);
 });
 
 router.post('/login', passport.authenticate('local-login'), function(req, res) {
-    res.send(req.isAuthenticated);
+    var responseObject = {};
+    if (req.isAuthenticated) {
+        responseObject.success = true;
+        responseObject.message = "Login Successful! Authenticated!";
+    } else {
+        responseObject.success = false;
+        responseObject.message = "Failed to signup.";
+    }
+    res.send(responseObject);
 });
 
 

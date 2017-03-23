@@ -5,8 +5,12 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
 
-    // if they aren't redirect them to the home page
-    res.redirect('/');
+    // if they aren't, respond appropriately.
+
+    var responseObject = {};
+    responseObject.message = "Not authenticated.";
+    responseObject.success = false;
+    res.send(responseObject);
 }
 
 module.exports.isLoggedIn = isLoggedIn;

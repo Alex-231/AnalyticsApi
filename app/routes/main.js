@@ -9,7 +9,10 @@ module.exports = function(app) {
     //Should probably move this later.
     //Home route
     app.get('/', function(req, res) {
-        res.send('AnalyticsApi ^_^');
+        var responseObject = {};
+        responseObject.message = "AnalyticsApi ^_^";
+        responseObject.success = true;
+        res.send(responseObject);
     });
 
     apiRoutes.use('/client', require('./client')); //Client routes. (/api/client)

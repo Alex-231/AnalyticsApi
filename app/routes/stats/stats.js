@@ -22,74 +22,34 @@ function InstanceAnalyticsProviders(client) {
     return analyticsProviders;
 }
 
-router.get('/refresh', function(req, res) {
-    var responseObject = {};
-    var analyticsProviders;
+router.get('/refresh', routerUtils.isLoggedIn, function(req, res) {
+    var responseObject = {}; //Declare the response...
 
+    //Find the client by the ID in the URL.
     Client.findById(req.params.clientId, function(err, client) {
-        if (err !== null) {
+        if (err !== null) { //If there's an error, respond with it.
             responseObject.success = false;
             responseObject.error = err;
-        } else if (client === null) {
+            res.send(responseObject);
+        } else if (client === null) { //If no client was found, respond.
             responseObject.success = false;
             responseObject.error = "No client found";
-        } else {
+            res.send(responseObject);
+        } else { //If a client was found, refresh their stats.
             responseObject.success = true;
             responseObject.message = "Refreshing stats for client '" + client.name + "'";
 
-            analyticsProviders = InstanceAnalyticsProviders(client);
+            var analyticsProviders = InstanceAnalyticsProviders(client); //Instance all of the analytics providers.
 
+            //Respond.
+            res.send(responseObject);
+
+            //Loop through the analytics providers, gather their likes.
             for (var i = 0; i < analyticsProviders.length; i++) {
-
                 analyticsProviders[i].getLikes();
             }
         }
     });
 });
-
-// router.get('/likes', /*routerUtils.isLoggedIn,*/ function(req, res) {
-
-//     var responseObject = {};
-//     var analyticsProviders;
-//     var totalLikes = 0;
-
-//     Client.findById(req.params.clientId, function(err, client) {
-//         if (err !== null) {
-//             responseObject.success = false;
-//             responseObject.error = err;
-//         } else if (client === null) {
-//             responseObject.success = false;
-//             responseObject.error = "No client found";
-//         } else {
-//             analyticsProviders = InstanceAnalyticsProviders(client);
-
-//             for (var i = 0; i < analyticsProviders.length; i++) {
-
-//                 request('http://www.modulus.io', testfunc);
-
-//                 // request('http://www.modulus.io', function(error, response, body) {
-//                 //     console.log(analyticsProviders[i].name);
-//                 //     if (!error && response.statusCode == 200) {
-//                 //         console.log(body); // Show the HTML for the Modulus homepage.
-//                 //     }
-//                 // });
-
-//                 var likes = 0;
-
-//                 likes = analyticsProviders[i].likes();
-
-//                 console.log(likes);
-
-//                 totalLikes += likes;
-
-//                 responseObject[analyticsProviders[i].name] = likes;
-//             }
-
-//             responseObject.total = totalLikes;
-//             console.log(JSON.stringify(responseObject));
-//         }
-//         res.send(JSON.stringify(responseObject));
-//     });
-// });
 
 module.exports = router;
