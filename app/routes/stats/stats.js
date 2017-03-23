@@ -47,6 +47,7 @@ router.get('/refresh', routerUtils.isLoggedIn, function(req, res) {
             //Loop through the analytics providers, gather their likes.
             for (var i = 0; i < analyticsProviders.length; i++) {
                 analyticsProviders[i].getLikes();
+                analyticsProviders[i].getPostLikes();
             }
         }
     });

@@ -46,6 +46,20 @@ var ClientSchema = new mongoose.Schema({
                 type: Date
             }
         }],
+        posts: [{
+            id: {
+                type: String,
+                required: true
+            },
+            likes: [{
+                count: {
+                    type: Number
+                },
+                date: {
+                    type: Date
+                }
+            }]
+        }],
         followers: [{
             count: {
                 type: Number
