@@ -13,8 +13,7 @@ var ClientSchema = new mongoose.Schema({
     apiData: {
         facebook: {
             appId: {
-                type: String,
-                unique: true
+                type: String
             },
             appSecret: {
                 type: String

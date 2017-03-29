@@ -9,7 +9,8 @@ router.post('/add', routerUtils.isLoggedIn, function(req, res) {
 
     var newClient = new Client();
 
-    newClient.name = req.body.clientName;
+    newClient.name = req.body.name;
+    newClient.emails = [req.body.email];
     // newClient.apiTokens.facebookToken = req.body.facebookToken;
     // newClient.apiTokens.twitterToken = req.body.twitterToken;
     // newClient.apiTokens.instagramToken = req.body.instagramToken;

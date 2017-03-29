@@ -12,7 +12,6 @@ var AnalyticsProviders = [];
 
 //Creates instances of each analytics provider, returns an array.
 function InstanceAnalyticsProviders(client) {
-    "use strict"; //This function uses classes, which are strict.
 
     var analyticsProviders = [];
     //This is where analytics providers can be added.
