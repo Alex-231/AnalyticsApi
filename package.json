@@ -38,14 +38,10 @@
         "cookie-parser": "^1.4.3",
         "express": "^4.15.1",
         "express-session": "^1.15.1",
-        "facebook-ads-sdk": "^2.7.2",
         "mongoose": "^4.8.6",
         "morgan": "^1.8.1",
         "passport": "^0.3.2",
-        "passport-facebook": "^2.1.1",
-        "passport-google-oauth": "^1.0.0",
         "passport-local": "^1.0.0",
-        "passport-twitter": "^1.0.4",
         "request": "^2.81.0"
     }
 }
