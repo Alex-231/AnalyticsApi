@@ -21,7 +21,5 @@ module.exports = function(app) {
 
     apiRoutes.use('/auth', require('./auth')); //Client routes. (/api/client)
 
-    apiRoutes.use('/user', require('./user'));
-
     app.use('/api', apiRoutes); //Route all apiRoutes to /api.
 };

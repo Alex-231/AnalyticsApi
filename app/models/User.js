@@ -12,20 +12,6 @@ var UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    role: {
-        type: String,
-        require: true,
-        enum: ['Admin', 'Client', 'None'],
-        default: 'None'
-    },
-    clients: {
-        type: [ObjectId],
-        required: false,
-    },
-    created: {
-        type: Date,
-        required: true
     }
 });
 

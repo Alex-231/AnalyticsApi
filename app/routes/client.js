@@ -17,20 +17,31 @@ router.post('/add', routerUtils.isLoggedIn, function(req, res) {
     // newClient.apiTokens.googleToken = req.body.googleToken;
 
     newClient.save(function(err) {
-        if (err)
-            res.send("Error saving new client: " + err);
-        else
-            res.send("Saved new client.");
+        if (err) {
+            responseObject.message = "Error saving new client: " + err;
+            responseObject.success = false;
+        } else {
+            responseObject.message = "Saved new client.";
+            responseObject.success = true;
+        }
     });
+    res.send(responseObject);
 });
 
 router.get('/:id', routerUtils.isLoggedIn, function(req, res) {
 
+    var responseObject = {};
+
     var client = databaseUtils.getClientById(req.params.id);
-    if (client)
-        res.send(client);
-    else
-        res.send("Client not found");
+    if (client) {
+        responseObject.message = "Successfully found user";
+        responseObject.success = false;
+        responseObject.data = client;
+    } else {
+        responseObject.message = "Client not found.";
+        responseObject.success = false;
+    }
+    res.send(responseObject);
 
 });
 
@@ -38,57 +49,51 @@ router.post('/:id/setup/facebook', routerUtils.isLoggedIn, function(req, res) {
 
     var responseObject = {};
 
-    //Does the user have permission to do this?
-    if (req.user.role == 'Client') {
-        var clientFound = false;
-        for (var client in req.user.clients) {
-            if (client == req.params.id);
-            clientFound = true;
-        }
-
-        if (!clientFound) {
-            responseObject.message = "You don't have permission to do this";
+    Client.findById(req.params.id, function(err, client) {
+        if (err) {
+            responseObject.message = err;
             responseObject.success = false;
+        } else if (!client) {
+            responseObject.message = "Client not found.";
+            responseObject.success = false;
+        } else {
+            client.apiTokens.facebook.appID = req.body.appID;
+            client.apiTokens.facebook.appSecret = req.body.appSecret;
+            client.save();
+
+            responseObject.message = "Updated Client";
+            responseObject.success = true;
         }
-    } else {
 
-        Client.findById(req.params.id, function(err, client) {
-            if (err) {
-                responseObject.message = err;
-                responseObject.success = false;
-            } else if (!client) {
-                responseObject.message = "Client not found.";
-                responseObject.success = false;
-            } else {
-                client.apiTokens.facebook.appID = req.body.appID;
-                client.apiTokens.facebook.appSecret = req.body.appSecret;
-                client.save();
 
-                responseObject.message = "Updated Client";
-                responseObject.success = true;
-            }
+    });
 
-        })
-    }
     res.send(responseObject);
+    //go to auth
 
-    //Go to oauth.
-
-
-})
+});
 
 router.post('/find/:name', routerUtils.isLoggedIn, function(req, res) {
+
+    var responseObject = {};
 
     Client.findOne({ name: req.params.name },
 
         function(err, client) {
-            if (err)
-                res.send(err);
-            else if (!client)
-                res.send("Client not found.");
-            else
-                res.send(client._id);
+            if (err) {
+                responseObject.message = err;
+                responseObject.success = false;
+            } else if (!client) {
+                responseObject.message = "No client found.";
+                responseObject.success = false;
+            } else {
+                responseObject.data = client;
+                responseObject.success = true;
+                responseObject.message = "Found client " + req.params.name;
+            }
         });
+
+    res.send(responseObject);
 
 })
 
