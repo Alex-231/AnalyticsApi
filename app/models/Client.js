@@ -29,7 +29,9 @@ var ClientSchema = new mongoose.Schema({
 
         },
         instagram: {
-
+            userToken: {
+                type: String
+            }
         }
     },
     cachedAnalytics: [{
