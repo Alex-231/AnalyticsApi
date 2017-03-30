@@ -98,11 +98,11 @@ router.get('/likes', routerUtils.isLoggedIn, function(req, res) {
             res.send(responseObject);
         } else { //If a client was found, refresh their stats.
             responseObject.success = true;
-            responseObject.message = "Successfully retrieved followers for'" + client.name + "'";
+            responseObject.message = "Successfully retrieved likes for'" + client.name + "'";
             responseObject.data = [{}];
 
             for (var i = 0; i < client.cachedAnalytics.length; i++) {
-                responseObject.data.push({ provider: client.cachedAnalytics[i].provider, followers: client.cachedAnalytics[i].likes });
+                responseObject.data.push({ provider: client.cachedAnalytics[i].provider, likes: client.cachedAnalytics[i].likes });
             }
 
             //Respond.
@@ -126,11 +126,11 @@ router.get('/posts', routerUtils.isLoggedIn, function(req, res) {
             res.send(responseObject);
         } else { //If a client was found, refresh their stats.
             responseObject.success = true;
-            responseObject.message = "Successfully retrieved followers for'" + client.name + "'";
+            responseObject.message = "Successfully retrieved posts for'" + client.name + "'";
             responseObject.data = [{}];
 
             for (var i = 0; i < client.cachedAnalytics.length; i++) {
-                responseObject.data.push({ provider: client.cachedAnalytics[i].provider, followers: client.cachedAnalytics[i].posts });
+                responseObject.data.push({ provider: client.cachedAnalytics[i].provider, posts: client.cachedAnalytics[i].posts });
             }
 
             //Respond.

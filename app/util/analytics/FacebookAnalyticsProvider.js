@@ -183,11 +183,11 @@ class FacebookAnalyticsProvider {
                         //If that happens, log an error.
                         var likeValues = JSON.parse(body).data[0].values;
                         if (likeValues === null) {
-                            client.errorsLastCache.push("FACEBOOK: No postlike values recieved. It's likely the token cannot access insights.");
+                            client.errorsLastCache.push("FACEBOOK: No like values recieved. It's likely the token cannot access insights.");
                         }
 
                         //Push the likes data to the array.
-                        client.cachedAnalytics[facebookCacheIndex].likes.push({ count: likeValues.length, date: Date.now() });
+                        client.cachedAnalytics[facebookCacheIndex].likes.push({ count: likeValues[0].value, date: Date.now() });
                     } else { //If the request was unsuccessful...
                         error = JSON.parse(body).error.message; //Try to find an error message.
 
