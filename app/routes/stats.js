@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router({ mergeParams: true });
 var passport = require('passport');
-var Client = require('../../models/Client');
+var Client = require('../models/Client');
 var request = require('request');
-var databaseUtils = require('../../util/databaseUtils');
-var routerUtils = require('../../util/routerUtils');
+var databaseUtils = require('../util/databaseUtils');
+var routerUtils = require('../util/routerUtils');
 
-var facebookAnalyticsProvider = require('../../util/analytics/facebookAnalyticsProvider'); //Not sure why this F is lower case...
-var instagramAnalyticsProvider = require('../../util/analytics/InstagramAnalyticsProvider');
+var facebookAnalyticsProvider = require('../util/analytics/facebookAnalyticsProvider'); //Not sure why this F is lower case...
+var instagramAnalyticsProvider = require('../util/analytics/InstagramAnalyticsProvider');
 
 var AnalyticsProviders = [];
 
@@ -18,11 +18,13 @@ function InstanceAnalyticsProviders(client) {
     //This is where analytics providers can be added.
     analyticsProviders.push(new facebookAnalyticsProvider(client._id));
     analyticsProviders.push(new instagramAnalyticsProvider(client._id));
-    //AnalyticsProviders.push(new TwitterAnalyticsProvider(client.apiTokens.twitter.token));
+    //AnalyticsProviders.push(new TwitterAnalyticsProvider(client._id));
 
     return analyticsProviders;
 }
 
+
+//Refresh all statistics for a client.
 router.get('/refresh', routerUtils.isLoggedIn, function(req, res) {
     var responseObject = {}; //Declare the response...
 
@@ -50,11 +52,14 @@ router.get('/refresh', routerUtils.isLoggedIn, function(req, res) {
                 analyticsProviders[i].getLikes();
                 analyticsProviders[i].getPostLikes();
                 analyticsProviders[i].getFollowers();
+                analyticsProviders[i].getViews();
             }
         }
     });
 });
 
+
+//Get client followers.
 router.get('/followers', routerUtils.isLoggedIn, function(req, res) {
     var responseObject = {};
 
@@ -74,6 +79,7 @@ router.get('/followers', routerUtils.isLoggedIn, function(req, res) {
             responseObject.data = [{}];
 
             for (var i = 0; i < client.cachedAnalytics.length; i++) {
+                //Add followers to the response.
                 responseObject.data.push({ provider: client.cachedAnalytics[i].provider, followers: client.cachedAnalytics[i].followers });
             }
 
@@ -102,7 +108,66 @@ router.get('/likes', routerUtils.isLoggedIn, function(req, res) {
             responseObject.data = [{}];
 
             for (var i = 0; i < client.cachedAnalytics.length; i++) {
+                //Add likes to the response.
                 responseObject.data.push({ provider: client.cachedAnalytics[i].provider, likes: client.cachedAnalytics[i].likes });
+            }
+
+            //Respond.
+            res.send(responseObject);
+        }
+    });
+});
+
+router.get('/views', routerUtils.isLoggedIn, function(req, res) {
+    var responseObject = {};
+
+    //Find the client by the ID in the URL.
+    Client.findById(req.params.clientId, function(err, client) {
+        if (err !== null) { //If there's an error, respond with it.
+            responseObject.success = false;
+            responseObject.error = err;
+            res.send(responseObject);
+        } else if (client === null) { //If no client was found, respond.
+            responseObject.success = false;
+            responseObject.error = "No client found";
+            res.send(responseObject);
+        } else { //If a client was found, refresh their stats.
+            responseObject.success = true;
+            responseObject.message = "Successfully retrieved views for'" + client.name + "'";
+            responseObject.data = [{}];
+
+            for (var i = 0; i < client.cachedAnalytics.length; i++) {
+                //Add views to the response.
+                responseObject.data.push({ provider: client.cachedAnalytics[i].provider, views: client.cachedAnalytics[i].views });
+            }
+
+            //Respond.
+            res.send(responseObject);
+        }
+    });
+});
+
+router.get('/stats', routerUtils.isLoggedIn, function(req, res) {
+    var responseObject = {};
+
+    //Find the client by the ID in the URL.
+    Client.findById(req.params.clientId, function(err, client) {
+        if (err !== null) { //If there's an error, respond with it.
+            responseObject.success = false;
+            responseObject.error = err;
+            res.send(responseObject);
+        } else if (client === null) { //If no client was found, respond.
+            responseObject.success = false;
+            responseObject.error = "No client found";
+            res.send(responseObject);
+        } else { //If a client was found, refresh their stats.
+            responseObject.success = true;
+            responseObject.message = "Successfully retrieved stats for'" + client.name + "'";
+            responseObject.data = [{}];
+
+            for (var i = 0; i < client.cachedAnalytics.length; i++) {
+                //Add all stats to the response.
+                responseObject.data.push(client.cachedAnalytics[i]);
             }
 
             //Respond.
@@ -130,6 +195,7 @@ router.get('/posts', routerUtils.isLoggedIn, function(req, res) {
             responseObject.data = [{}];
 
             for (var i = 0; i < client.cachedAnalytics.length; i++) {
+                //Add posts to the response.
                 responseObject.data.push({ provider: client.cachedAnalytics[i].provider, posts: client.cachedAnalytics[i].posts });
             }
 

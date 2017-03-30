@@ -89,6 +89,10 @@ class FacebookAnalyticsProvider {
 
     }
 
+    getViews() {
+
+    }
+
 };
 
 module.exports = FacebookAnalyticsProvider;

@@ -7,19 +7,25 @@ module.exports = function(app) {
     require('../util/routerUtils');
 
     //Should probably move this later.
-    //Home route
+    //Home route, for debugging purposes.
     app.get('/', function(req, res) {
         var responseObject = {};
-        responseObject.message = "AnalyticsApi ^_^";
+        responseObject.message = "AnalyticsApi <3";
         responseObject.success = true;
         res.send(responseObject);
     });
 
-    apiRoutes.use('/client', require('./client')); //Client routes. (/api/client)
+    //Client routes. (/api/client)
+    apiRoutes.use('/client', require('./client'));
 
-    apiRoutes.use('/client/:clientId/', require('./stats/stats')); //Stats routes (/(clientId)/stats)
+    //Stats routes (/<clientId>/stats)
+    apiRoutes.use('/client/:clientId/', require('./stats'));
 
-    apiRoutes.use('/auth', require('./auth')); //Client routes. (/api/client)
+    //Client routes. (/api/client)
+    apiRoutes.use('/auth', require('./auth'));
 
-    app.use('/api', apiRoutes); //Route all apiRoutes to /api.
+
+
+    //Route all apiRoutes to /api.
+    app.use('/api', apiRoutes);
 };

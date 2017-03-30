@@ -5,6 +5,9 @@ var Client = require('../models/Client');
 var databaseUtils = require('../util/databaseUtils');
 var routerUtils = require('../util/routerUtils');
 
+//CLIENT ROUTES
+
+//Add a new client.
 router.post('/add', routerUtils.isLoggedIn, function(req, res) {
 
     var newClient = new Client();
@@ -28,6 +31,7 @@ router.post('/add', routerUtils.isLoggedIn, function(req, res) {
     res.send(responseObject);
 });
 
+//Get a client by ID.
 router.get('/:id', routerUtils.isLoggedIn, function(req, res) {
 
     var responseObject = {};
@@ -45,6 +49,7 @@ router.get('/:id', routerUtils.isLoggedIn, function(req, res) {
 
 });
 
+//Add Facebook api data to a client.
 router.post('/:id/setup/facebook', routerUtils.isLoggedIn, function(req, res) {
 
     var responseObject = {};
@@ -69,10 +74,10 @@ router.post('/:id/setup/facebook', routerUtils.isLoggedIn, function(req, res) {
     });
 
     res.send(responseObject);
-    //go to auth
-
 });
 
+
+//Find a client by name.
 router.post('/find/:name', routerUtils.isLoggedIn, function(req, res) {
 
     var responseObject = {};
@@ -94,7 +99,6 @@ router.post('/find/:name', routerUtils.isLoggedIn, function(req, res) {
         });
 
     res.send(responseObject);
-
 })
 
 module.exports = router;

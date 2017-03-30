@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
-// app/routes.js
+//LOCAL AUTHENTICATION ROUTES
 
 router.post('/signup',
     passport.authenticate('local-signup'),
@@ -33,7 +33,7 @@ router.post('/login', passport.authenticate('local-login'), function(req, res) {
         responseObject.message = "Login Successful! Authenticated!";
     } else {
         responseObject.success = false;
-        responseObject.message = "Failed to signup.";
+        responseObject.message = "Failed to login.";
     }
     res.send(responseObject);
 });

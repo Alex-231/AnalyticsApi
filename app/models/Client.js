@@ -47,6 +47,14 @@ var ClientSchema = new mongoose.Schema({
                 type: Date
             }
         }],
+        views: [{
+            count: {
+                type: Number
+            },
+            date: {
+                type: Date
+            }
+        }],
         posts: [{
             id: {
                 type: String,
