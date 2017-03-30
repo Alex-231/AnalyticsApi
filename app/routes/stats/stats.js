@@ -81,7 +81,62 @@ router.get('/followers', routerUtils.isLoggedIn, function(req, res) {
             res.send(responseObject);
         }
     });
+});
 
-})
+router.get('/likes', routerUtils.isLoggedIn, function(req, res) {
+    var responseObject = {};
+
+    //Find the client by the ID in the URL.
+    Client.findById(req.params.clientId, function(err, client) {
+        if (err !== null) { //If there's an error, respond with it.
+            responseObject.success = false;
+            responseObject.error = err;
+            res.send(responseObject);
+        } else if (client === null) { //If no client was found, respond.
+            responseObject.success = false;
+            responseObject.error = "No client found";
+            res.send(responseObject);
+        } else { //If a client was found, refresh their stats.
+            responseObject.success = true;
+            responseObject.message = "Successfully retrieved followers for'" + client.name + "'";
+            responseObject.data = [{}];
+
+            for (var i = 0; i < client.cachedAnalytics.length; i++) {
+                responseObject.data.push({ provider: client.cachedAnalytics[i].provider, followers: client.cachedAnalytics[i].likes });
+            }
+
+            //Respond.
+            res.send(responseObject);
+        }
+    });
+});
+
+router.get('/posts', routerUtils.isLoggedIn, function(req, res) {
+    var responseObject = {};
+
+    //Find the client by the ID in the URL.
+    Client.findById(req.params.clientId, function(err, client) {
+        if (err !== null) { //If there's an error, respond with it.
+            responseObject.success = false;
+            responseObject.error = err;
+            res.send(responseObject);
+        } else if (client === null) { //If no client was found, respond.
+            responseObject.success = false;
+            responseObject.error = "No client found";
+            res.send(responseObject);
+        } else { //If a client was found, refresh their stats.
+            responseObject.success = true;
+            responseObject.message = "Successfully retrieved followers for'" + client.name + "'";
+            responseObject.data = [{}];
+
+            for (var i = 0; i < client.cachedAnalytics.length; i++) {
+                responseObject.data.push({ provider: client.cachedAnalytics[i].provider, followers: client.cachedAnalytics[i].posts });
+            }
+
+            //Respond.
+            res.send(responseObject);
+        }
+    });
+});
 
 module.exports = router;
