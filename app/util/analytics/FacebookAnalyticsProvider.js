@@ -219,7 +219,7 @@ class FacebookAnalyticsProvider {
     }
 
     getFollowers() {
-        //Why can
+
     }
 
     getViews() {

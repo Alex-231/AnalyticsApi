@@ -1,23 +1,21 @@
 "use strict";
-const apiURL = "https://api.instagram.com/v1/";
-const providerName = "Instagram";
+const apiURL = "https://ads-api.twitter.com/1.1/";
+const providerName = "Twitter";
 var request = require('request');
 var databaseUtils = require('../databaseUtils');
 var Client = require('../../models/Client');
 
 class FacebookAnalyticsProvider {
     constructor(clientId) {
-        this.name = "Instagram";
+        this.name = "Twitter";
         this.clientId = clientId;
     }
 
-    getFollowers() {
-        console.log(this.clientId);
-
+    getPostLikes() {
         var self = this; //Store a reference to this, for callbacks.
 
         //The callback for the request below, handles the response.
-        var callback = function(error, response, body) {
+        var postsCallback = function(error, response, body) {
             Client.findById(self.clientId, function(err, client) { //Find the client to refresh.
                 if (err || client === null) {
                     console.log(err); //If the client was not found, log the error. We can't store this in the database because there's no client to store it on.
@@ -26,44 +24,52 @@ class FacebookAnalyticsProvider {
 
                         //Find the location of the facebook provider in the database.
                         //If it's not there, make one.
-                        var instagramCacheIndex = -1;
+                        var twitterCacheIndex = -1;
 
-                        for (var i = 0; i < client.cachedAnalytics.length; i++) { //Loop through looking for it.
+                        for (var i = 0; i < client.cachedAnalytics.length; i++) { //Loop through looking for the cache.
                             if (client.cachedAnalytics[i].provider == providerName) { //If it's found, store the index.
-                                instagramCacheIndex = i;
+                                twitterCacheIndex = i;
                                 break;
                             }
                         }
 
-                        if (instagramCacheIndex == -1) { //If it's not found, make it.
+                        if (twitterCacheIndex == -1) { //If it's not found, make it.
                             if (client.cachedAnalytics === null) { //If there's no cached analytics at all, create the array and add likes.
-                                client.cachedAnalytics = [{ provider: providerName, followers: [] }];
-                                instagramCacheIndex = client.cachedAnalytics.length - 1;
+                                client.cachedAnalytics = [{ provider: providerName, posts: [] }];
+                                twitterCacheIndex = client.cachedAnalytics.length - 1;
                             } else { //Otherwise, add to the existing array.
-                                client.cachedAnalytics.push({ provider: providerName, followers: [] });
-                                instagramCacheIndex = client.cachedAnalytics.length - 1;
+                                client.cachedAnalytics.push({ provider: providerName, posts: [] });
+                                twitterCacheIndex = client.cachedAnalytics.length - 1;
                             }
                         }
 
-                        if (client.cachedAnalytics[instagramCacheIndex].followers === null) { //If there's no likes arryay for some reason, make one.
-                            client.cachedAnalytics[instagramCacheIndex].followers = [];
+                        //Now store the post IDs.
+
+                        client.cachedAnalytics[twitterCacheIndex].posts = [];
+
+                        client.save(); //Save changes to the client.
+                        //Now request the likes.
+
+                        for (var i = 0; i < JSON.parse(body).length; i++) {
+                            client.cachedAnalytics[twitterCacheIndex].push({
+                                likes: JSON.parse(body)[i].favourites_count,
+                                id: JSON.parse(body)[i].id
+                            });
                         }
 
-                        //Push the likes data to the array.
-                        client.cachedAnalytics[instagramCacheIndex].followers.push({ count: JSON.parse(body).data.counts.followed_by, date: Date.now() });
                     } else { //If the request was unsuccessful...
-                        error = JSON.parse(body).meta.error_message; //.error.message; //Try to find an error message.
+                        error = JSON.parse(body).errors[0].message; //Try to find an error message.
 
                         if (error === null) //If no error message was found, make one.
-                            error = "Failed to process getFollowers callback.";
+                            error = "Failed to process getPostLikes posts callback.";
 
                         if (client.errorsLastCache === null) //If there's no errors list array, make one.
                             client.errorsLastCache = [];
 
-                        client.errorsLastCache.push("INSTAGRAM: " + error); //Add the error to the array.
-                    }
+                        client.errorsLastCache.push(providerName + " " + error); //Add the error to the array.
 
-                    client.save(); //Save changes to the client.
+                        client.save(); //Save changes to the client.
+                    }
                 }
             });
         };
@@ -73,25 +79,21 @@ class FacebookAnalyticsProvider {
             if (err) {
                 console.log(err); //If an error occured, log it.
             } else if (client === null) {
-                console.log("No client found, Instagram.getLikes() request, ID supplied = " + self.clientId); //If no client was found, log it.
+                console.log("No client found, Facebook.getPostLikes() request, ID supplied = " + self.clientId); //If no client was found, log it.
             } else {
                 //Begin the request.
-                request.get(apiURL + "users/self?access_token=" + client.apiData.instagram.userToken, callback);
+                request.get(apiURL + "statuses/user_timeline.json", postsCallback);
             }
         });
     }
 
-    getLikes() {
+    getLikes() {}
+
+    getFollowers() {
 
     }
 
-    getPostLikes() {
-
-    }
-
-    getViews() {
-
-    }
+    getViews() {}
 
 };
 

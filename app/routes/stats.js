@@ -8,6 +8,7 @@ var routerUtils = require('../util/routerUtils');
 
 var facebookAnalyticsProvider = require('../util/analytics/facebookAnalyticsProvider'); //Not sure why this F is lower case...
 var instagramAnalyticsProvider = require('../util/analytics/InstagramAnalyticsProvider');
+var twitterAnalyticsProvider = require('../util/analytics/TwitterAnalyticsProvider');
 
 var AnalyticsProviders = [];
 
@@ -18,7 +19,7 @@ function InstanceAnalyticsProviders(client) {
     //This is where analytics providers can be added.
     analyticsProviders.push(new facebookAnalyticsProvider(client._id));
     analyticsProviders.push(new instagramAnalyticsProvider(client._id));
-    //AnalyticsProviders.push(new TwitterAnalyticsProvider(client._id));
+    analyticsProviders.push(new twitterAnalyticsProvider(client._id));
 
     return analyticsProviders;
 }
